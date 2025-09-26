@@ -1,4 +1,3 @@
-// backend/services/aiService.js - Updated
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 class GeminiAIService {
@@ -13,7 +12,78 @@ class GeminiAIService {
     this.model = this.genAI.getGenerativeModel({ model: modelName });
   }
 
-  // NEW METHOD: Generate suggestions with pre-formatted prompt
+  // NEW METHOD: Bilingual travel suggestions
+  async generateBilingualTravelSuggestions(enhancedPrompt, location) {
+    try {
+      const structuredPrompt = `You are a knowledgeable travel assistant specializing in Japan. 
+Generate personalized suggestions based on the weather conditions and user request provided below.
+
+${enhancedPrompt}
+
+Please provide your response in BOTH English and Japanese languages.
+
+FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+
+=== ENGLISH ===
+[Provide a 4-sentence response to the user's request]
+
+[Then provide suggestions in these categories:]
+
+1. Travel & Sightseeing:
+   - List 3-4 key attractions suitable for the weather
+
+2. Outdoor Activities & Sports:
+   - Suggest weather-appropriate activities
+
+3. Fashion & Clothing Recommendations:
+   - Suggest clothing for current temperature
+   - Include layering advice
+   - Recommend necessary accessories
+
+4. Practical Tips:
+   - Transportation recommendations
+   - Budget-friendly alternatives
+
+=== JAPANESE ===
+[Provide the EXACT SAME content translated to natural, polite Japanese]
+[Use appropriate honorifics and Japanese travel vocabulary]
+[Maintain the same structure and bullet points]
+
+Requirements:
+- Use bullet points only; no emojis, icons, or bold text
+- One point, one sentence for each suggestion
+- Be specific about locations in ${location}
+- Keep suggestions realistic and culturally appropriate for Japan
+- The Japanese version should be a natural translation, not word-for-word`;
+
+      console.log('🤖 Generating bilingual travel suggestions...');
+      
+      const result = await this.model.generateContent(structuredPrompt);
+      const response = await result.response;
+      const fullResponse = response.text();
+
+      // Parse the response to separate English and Japanese
+      const englishMatch = fullResponse.match(/=== ENGLISH ===([\s\S]*?)(?==== JAPANESE ===|$)/);
+      const japaneseMatch = fullResponse.match(/=== JAPANESE ===([\s\S]*?)$/);
+
+      return {
+        suggestions: {
+          english: englishMatch ? englishMatch[1].trim() : fullResponse,
+          japanese: japaneseMatch ? japaneseMatch[1].trim() : null,
+          isBilingual: true
+        },
+        type: 'bilingual_travel_suggestions',
+        timestamp: new Date().toISOString(),
+        location: location
+      };
+
+    } catch (error) {
+      console.error('Gemini AI Error:', error.message);
+      throw new Error(`AI suggestion error: ${error.message}`);
+    }
+  }
+
+  // EXISTING METHOD: Generate suggestions with pre-formatted prompt
   async generateTravelSuggestionsWithPrompt(enhancedPrompt, location) {
     try {
       const structuredPrompt = `You are a knowledgeable travel assistant specializing in Japan. 
@@ -167,9 +237,9 @@ Make them specific and actionable.`;
       const questions = response.text()
         .split('\n')
         .filter(q => q.trim().length > 0)
-        .map(q => q.replace(/^[-•*\d.]+\s*/, '').trim()) // Remove bullet points
-        .filter(q => q.length > 10) // Remove very short lines
-        .slice(0, 4); // Maximum 4 questions
+        .map(q => q.replace(/^[-•*\d.]+\s*/, '').trim())
+        .filter(q => q.length > 10)
+        .slice(0, 4);
 
       return {
         questions: questions,
@@ -178,7 +248,6 @@ Make them specific and actionable.`;
 
     } catch (error) {
       console.error('Follow-up questions error:', error.message);
-      // Return default questions on error
       return { 
         questions: [
           "What indoor activities would you recommend if it rains?",

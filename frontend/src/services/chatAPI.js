@@ -1,4 +1,3 @@
-// src/services/chatAPI.js
 import axios from 'axios';
 
 // Base API URL: configurable via env, defaults to local backend
@@ -10,9 +9,9 @@ const chatAPI = axios.create({
   // Gemini responses can take longer; use a higher timeout
   timeout: 60000,
   headers: {
-    'Content-Type': 'application/json', 
+    'Content-Type': 'application/json',
   },
-}); 
+});
 
 // Frontend-local session id used only for header logging/tracing
 function getOrCreateSessionId() {
@@ -93,8 +92,8 @@ export const sendChatMessage = async (message, city, isJapanese = false) => {
     const response = await chatAPI.post('/chat', {
       message,
       sessionId,
-      // pass city so backend knows intended location (even though backend also extracts)
-      city
+      city,
+      preferBilingual: true // Always request bilingual responses
     });
     // Persist returned backend sessionId for continuity
     const returnedSessionId = response?.data?.data?.sessionId;

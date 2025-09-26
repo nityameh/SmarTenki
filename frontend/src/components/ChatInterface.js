@@ -4,6 +4,7 @@ import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import VoiceInput from './VoiceInput';
 import ThemeToggle from './ThemeToggle';
+import LanguageToggle from './LanguageToggle';
 import { sendChatMessage } from '../services/chatAPI';
 
 const ChatInterface = ({ onBackHome }) => {
@@ -36,7 +37,8 @@ const ChatInterface = ({ onBackHome }) => {
         console.log('[ChatInterface] Received response', {
           hasWeather: Boolean(data.weather),
           hasFollowUps: Array.isArray(data.followUpQuestions),
-          city: data.currentCity
+          city: data.currentCity,
+          isBilingual: data.response?.isBilingual
         });
 
         const mappedWeather = data.weather ? {
@@ -59,7 +61,7 @@ const ChatInterface = ({ onBackHome }) => {
         const aiMessage = {
           id: `ai_${Date.now()}`,
           type: 'assistant',
-          content: data.response,
+          content: data.response, // This now contains {english, japanese, isBilingual}
           weather: mappedWeather,
           followUpQuestions: data.followUpQuestions,
           timestamp: new Date(),
@@ -129,21 +131,9 @@ You can speak in Japanese using the microphone or type your questions.`,
             </h1>
             
             <div className="flex items-center space-x-3">
+              <LanguageToggle />
               <ThemeToggle />
-              <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-3 py-1.5 hover:bg-white/20 transition-colors">
-                <MapPin className="w-4 h-4 mr-1.5 text-white/90" />
-                <select
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="bg-transparent text-white border-0 text-sm focus:outline-none cursor-pointer font-medium"
-                >
-                  {['Tokyo', 'Osaka', 'Kyoto', 'Hiroshima', 'Sapporo', 'Fukuoka'].map(city => (
-                    <option key={city} value={city} className="text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800">
-                      {city}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              
             </div>
           </div>
         </div>

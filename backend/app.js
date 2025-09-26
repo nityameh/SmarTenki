@@ -1,4 +1,3 @@
-// backend/app.js (Updated main chat endpoint)
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -22,10 +21,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
 
-// Main chat endpoint - UPDATED WITH PROPER FLOW
+// Main chat endpoint - UPDATED FOR BILINGUAL
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message, sessionId } = req.body;
+    const { message, sessionId, preferBilingual = true } = req.body;
     
     // Step 1: Validate input
     if (!message || typeof message !== 'string') {
@@ -97,26 +96,38 @@ app.post('/api/chat', async (req, res) => {
     
     console.log(`🤖 Generating AI response...`);
 
-    // Step 9: Generate AI suggestions
-    const aiResponse = await aiService.generateTravelSuggestionsWithPrompt(
-      enhancedPrompt,
-      currentCity
-    );
+    // Step 9: Generate AI suggestions - NOW BILINGUAL
+    let aiResponse;
+    
+    if (preferBilingual) {
+      // Use new bilingual method
+      aiResponse = await aiService.generateBilingualTravelSuggestions(
+        enhancedPrompt,
+        currentCity
+      );
+    } else {
+      // Fallback to original method if needed
+      aiResponse = await aiService.generateTravelSuggestionsWithPrompt(
+        enhancedPrompt,
+        currentCity
+      );
+    }
 
-    // Step 10: Generate follow-up questions
-    const followUpQuestions = await aiService.generateFollowUpQuestions(
-      aiResponse.suggestions,
-      weatherData
-    );
+    // Step 10: Generate follow-up questions (optional)
+    // const followUpQuestions = await aiService.generateFollowUpQuestions(
+    //   aiResponse.suggestions?.english || aiResponse.suggestions,
+    //   weatherData
+    // );
 
     // Step 11: Add to message history
-    contextService.addMessage(actualSessionId, message, aiResponse.suggestions);
+    const responseText = aiResponse.suggestions?.english || aiResponse.suggestions;
+    contextService.addMessage(actualSessionId, message, responseText);
 
     // Step 12: Send response
     res.json({
       success: true,
       data: {
-        response: aiResponse.suggestions,
+        response: aiResponse.suggestions, // Now contains {english, japanese, isBilingual}
         weather: weatherData,
         weatherSummary: weatherSummary,
         currentCity: currentCity,

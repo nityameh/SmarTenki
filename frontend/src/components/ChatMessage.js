@@ -1,12 +1,35 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { User, Clock } from 'lucide-react';
 import RobotAvatar from './RobotAvatar';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ChatMessage = ({ message, isLoading = false }) => {
   const messageRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  const { isJapanese } = useLanguage();
   const isUser = message?.type === 'user';
   const timestamp = message?.timestamp || new Date();
+
+  const getDisplayContent = () => {
+    if (!message || !message.content) return '';
+    
+    // For user messages, always show original
+    if (isUser) {
+      return message.content;
+    }
+    
+    // For AI messages with bilingual content
+    if (typeof message.content === 'object' && message.content.isBilingual) {
+      return isJapanese 
+        ? (message.content.japanese || message.content.english || '')
+        : (message.content.english || '');
+    }
+    
+    // Fallback for non-bilingual messages
+    return typeof message.content === 'string' 
+      ? message.content 
+      : (message.content.english || message.content);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -76,11 +99,20 @@ const ChatMessage = ({ message, isLoading = false }) => {
             : 'bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm text-gray-900 dark:text-gray-100 rounded-bl-none shadow-md border border-white/40 dark:border-slate-700/40'
         }`}>
           <div className="relative z-10 whitespace-pre-wrap leading-relaxed">
-            {message.content}
+            {getDisplayContent()}
           </div>
           
+          {/* Language indicator for bilingual messages */}
+          {!isUser && message.content?.isBilingual && (
+            <div className="mt-2 pt-2 border-t border-white/20 dark:border-gray-700/50">
+              <span className="text-xs opacity-60">
+                {isJapanese ? '日本語版' : 'English Version'}
+              </span>
+            </div>
+          )}
+          
           {/* Original Japanese text if available */}
-          {message.originalJapanese && (
+          {message.originalJapanese && isUser && (
             <div className={`mt-2 pt-2 border-t ${
               isUser ? 'border-blue-400/30' : 'border-gray-200 dark:border-gray-700'
             }`}>
