@@ -1,6 +1,9 @@
 Smart Travel Assistant - Weather-Powered Travel Companion
 A bilingual (English/Japanese) AI-powered travel assistant that provides personalized travel recommendations based on real-time weather conditions. Built with React and Node.js, this application helps travelers make informed decisions about clothing, activities, and destinations across Japan and India.
-🎯 Key Features
+
+
+🎯 Key Features 
+
 Core Functionality
 
 Bilingual Support: Seamless language switching between English and Japanese with persistent preference storage
@@ -20,6 +23,7 @@ Natural Language Processing: Understands queries in both structured and conversa
 Error Recovery: Graceful fallbacks with toast notifications for better UX
 
 🛠️ Technology Stack
+
 Frontend
 
 React 18 - UI framework
