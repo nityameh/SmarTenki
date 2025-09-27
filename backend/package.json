@@ -16,5 +16,8 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "openai": "^5.23.0"
+  },
+  "overrides": {
+    "path-to-regexp": "0.1.7"
   }
 }
