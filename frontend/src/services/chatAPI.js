@@ -105,16 +105,6 @@ export const sendChatMessage = async (message, city, isJapanese = false) => {
   }
 };
 
-// Translation endpoint exposed by backend
-export const translateText = async (text) => {
-  console.log('🌐 [chatAPI] translateText', { textPreview: String(text).slice(0, 40) });
-  try {
-    const response = await chatAPI.post('/translate', { text });
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.error || 'Failed to translate text');
-  }
-};
 
 export const checkAPIHealth = async () => {
   try {
@@ -123,10 +113,4 @@ export const checkAPIHealth = async () => {
   } catch (error) {
     throw new Error('API health check failed');
   }
-};
-
-export default {
-  sendChatMessage,
-  translateText,
-  checkAPIHealth
 };
