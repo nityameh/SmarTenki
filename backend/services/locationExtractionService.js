@@ -93,7 +93,27 @@ class LocationExtractionService {
       // === SAPPORO DISTRICTS ===
       'susukino': ['susukino', 'すすきの', '薄野'],
       'odori': ['odori', 'ōdori', '大通', 'おおどおり'],
-      'maruyama': ['maruyama', '円山', 'まるやま']
+      'maruyama': ['maruyama', '円山', 'まるやま'],
+
+      // INDIA CITY
+      'delhi': ['delhi', 'new delhi', 'दिल्ली', 'नई दिल्ली'],
+      'mumbai': ['mumbai', 'bombay', 'मुंबई', 'मुम्बई'],
+      'bangalore': ['bangalore', 'bengaluru', 'बैंगलोर', 'बेंगलुरु'],
+      'chennai': ['chennai', 'madras', 'चेन्नई', 'मद्रास'],
+      'kolkata': ['kolkata', 'calcutta', 'कोलकाता', 'कलकत्ता'],
+      'hyderabad': ['hyderabad', 'हैदराबाद'],
+      'pune': ['pune', 'poona', 'पुणे'],
+      'ahmedabad': ['ahmedabad', 'amdavad', 'अहमदाबाद'],
+      'surat': ['surat', 'सूरत'],
+      'jaipur': ['jaipur', 'जयपुर'],
+      'lucknow': ['lucknow', 'लखनऊ'],
+      'kanpur': ['kanpur', 'cawnpore', 'कानपुर'],
+      'nagpur': ['nagpur', 'नागपुर'],
+      'indore': ['indore', 'इंदौर'],
+      'bhopal': ['bhopal', 'भोपाल'],
+      'visakhapatnam': ['visakhapatnam', 'vizag', 'विशाखापट्टनम'],
+      'patna': ['patna', 'पटना'],
+      'vadodara': ['vadodara', 'baroda', 'वडोदरा'],
     };
   }
 

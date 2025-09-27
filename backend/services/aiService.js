@@ -13,130 +13,194 @@ class GeminiAIService {
   }
 
   // NEW METHOD: Bilingual travel suggestions
-  async generateBilingualTravelSuggestions(enhancedPrompt, location) {
-    try {
-      const structuredPrompt = `You are a knowledgeable travel assistant specializing in Japan. 
-Generate personalized suggestions based on the weather conditions and user request provided below.
+//   async generateBilingualTravelSuggestions(enhancedPrompt, location) {
+//     try {
+//       const structuredPrompt = `You are a knowledgeable travel assistant specializing in Japan. 
+// Generate personalized suggestions based on the weather conditions and user request provided below.
+
+// ${enhancedPrompt}
+
+// Please provide your response in BOTH English and Japanese languages.
+
+// FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+
+// === ENGLISH ===
+// [Provide a 4-sentence response to the user's request]
+
+// [Then provide suggestions in these categories:]
+
+// 1. Travel & Sightseeing:
+//    - List 3-4 key attractions suitable for the weather
+
+// 2. Outdoor Activities & Sports:
+//    - Suggest weather-appropriate activities
+
+// 3. Fashion & Clothing Recommendations:
+//    - Suggest clothing for current temperature
+//    - Include layering advice
+//    - Recommend necessary accessories
+
+// 4. Practical Tips:
+//    - Transportation recommendations
+//    - Budget-friendly alternatives
+
+// === JAPANESE ===
+// [Provide the EXACT SAME content translated to natural, polite Japanese]
+// [Use appropriate honorifics and Japanese travel vocabulary]
+// [Maintain the same structure and bullet points]
+
+// Requirements:
+// - Use bullet points only; no emojis, icons, or bold text
+// - One point, one sentence for each suggestion
+// - Be specific about locations in ${location}
+// - Keep suggestions realistic and culturally appropriate for Japan
+// - The Japanese version should be a natural translation, not word-for-word`;
+
+//       console.log('🤖 Generating bilingual travel suggestions...');
+      
+//       const result = await this.model.generateContent(structuredPrompt);
+//       const response = await result.response;
+//       const fullResponse = response.text();
+
+//       // Parse the response to separate English and Japanese
+//       const englishMatch = fullResponse.match(/=== ENGLISH ===([\s\S]*?)(?==== JAPANESE ===|$)/);
+//       const japaneseMatch = fullResponse.match(/=== JAPANESE ===([\s\S]*?)$/);
+
+//       return {
+//         suggestions: {
+//           english: englishMatch ? englishMatch[1].trim() : fullResponse,
+//           japanese: japaneseMatch ? japaneseMatch[1].trim() : null,
+//           isBilingual: true
+//         },
+//         type: 'bilingual_travel_suggestions',
+//         timestamp: new Date().toISOString(),
+//         location: location
+//       };
+
+//     } catch (error) {
+//       console.error('Gemini AI Error:', error.message);
+//       throw new Error(`AI suggestion error: ${error.message}`);
+//     }
+//   }
+
+//   // EXISTING METHOD: Generate suggestions with pre-formatted prompt
+//   async generateTravelSuggestionsWithPrompt(enhancedPrompt, location) {
+//     try {
+//       const structuredPrompt = `You are a knowledgeable travel assistant specializing in Japan. 
+// Generate personalized suggestions based on the weather conditions and user request provided below.
+
+// ${enhancedPrompt}  please give me an accurate response for the above message considering the intent of the prompt in 4 sentence and
+
+// Please also  provide added suggestions in these categories:
+
+// You are a travel and lifestyle assistant for Japan. Based on the current weather and 3-day forecast, provide concise, practical recommendations in the following categories:
+
+// 1. Travel & Sightseeing:
+//    - List 3-4 key attractions suitable for the weather.
+
+// 2. Outdoor Activities & Sports:
+//    - Suggest weather-appropriate activities (hiking, cycling, beach, etc.).
+//    - Consider temperature and wind conditions.
+
+// 3. Fashion & Clothing Recommendations:
+//    - Suggest clothing for current temperature.
+//    - Include layering advice for temperature changes.
+//    - Recommend necessary accessories (umbrella, sunglasses, etc.).
+
+// 4. Practical Tips:
+//    - Transportation recommendations.
+//    - Budget-friendly alternatives.
+
+// Requirements:.
+// - Use bullet points only; no emojis, icons, or bold text.
+// - Avoid long explanations or extra commentary.
+// - Please give me one point one sentence repsone for the added suggestions 
+// - Focus on actionable, realistic advice suitable for a traveler in Japan.
+// . Be specific about locations in ${location}, times, and practical details. Keep suggestions realistic and culturally appropriate for Japan.`;
+
+//       console.log('🤖 Generating structured travel suggestions...');
+      
+//       const result = await this.model.generateContent(structuredPrompt);
+//       const response = await result.response;
+//       const suggestions = response.text();
+
+//       return {
+//         suggestions: suggestions,
+//         type: 'enhanced_travel_suggestions',
+//         timestamp: new Date().toISOString(),
+//         location: location
+//       };
+
+//     } catch (error) {
+//       console.error('Gemini AI Error:', error.message);
+//       throw new Error(`AI suggestion error: ${error.message}`);
+//     }
+//   }
+async generateBilingualTravelSuggestions(enhancedPrompt, location) {
+  try {
+    const structuredPrompt = `You are a travel assistant for ${location}, Japan. Respond naturally to what the user is asking.
 
 ${enhancedPrompt}
 
-Please provide your response in BOTH English and Japanese languages.
+RESPONSE APPROACH:
+1. Read the user's message carefully and answer THAT specific question first
+2. Let the weather conditions inform your advice (don't just list weather stats)
+3. Be conversational, not formulaic
+4. use simple text in response dont give bold font, emoji , icons anything other than simple text
 
-FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+
+CONTEXT-AWARE GUIDELINES:
+- If user asks about weather → Focus on conditions and how they affect plans
+- If user asks what to wear → Specific clothing advice for the temperature/conditions
+- If user asks what to do → Activities that work well with current weather
+- If user asks about food → Weather-appropriate dining suggestions
+- If general travel question → Brief weather context, then relevant suggestions
+
+BILINGUAL OUTPUT FORMAT:
 
 === ENGLISH ===
-[Provide a 4-sentence response to the user's request]
-
-[Then provide suggestions in these categories:]
-
-1. Travel & Sightseeing:
-   - List 3-4 key attractions suitable for the weather
-
-2. Outdoor Activities & Sports:
-   - Suggest weather-appropriate activities
-
-3. Fashion & Clothing Recommendations:
-   - Suggest clothing for current temperature
-   - Include layering advice
-   - Recommend necessary accessories
-
-4. Practical Tips:
-   - Transportation recommendations
-   - Budget-friendly alternatives
+[Natural conversational response that directly addresses what they asked]
+[Include 3-5 practical suggestions relevant to their question and the weather]
+[Mention specific places in ${location} when applicable]
 
 === JAPANESE ===
-[Provide the EXACT SAME content translated to natural, polite Japanese]
-[Use appropriate honorifics and Japanese travel vocabulary]
-[Maintain the same structure and bullet points]
+[Natural Japanese translation using appropriate politeness]
+[Maintain the helpful tone but allow natural Japanese sentence flow]
 
-Requirements:
-- Use bullet points only; no emojis, icons, or bold text
-- One point, one sentence for each suggestion
-- Be specific about locations in ${location}
-- Keep suggestions realistic and culturally appropriate for Japan
-- The Japanese version should be a natural translation, not word-for-word`;
+QUALITY GUIDELINES:
+- Avoid using BOLD text , emoji and icon, keep the response simple and polite
+- Start with what they're actually asking about
+- If weather is severe (storm/extreme heat/cold), mention safety first
+- Keep suggestions specific to ${location}, not generic Japan
+- Total response: 5-8 sentences in each language
+- Adapt your response style to the question - don't force categories if not needed`;
 
-      console.log('🤖 Generating bilingual travel suggestions...');
-      
-      const result = await this.model.generateContent(structuredPrompt);
-      const response = await result.response;
-      const fullResponse = response.text();
+    console.log('🤖 Generating bilingual travel suggestions...');
+    
+    const result = await this.model.generateContent(structuredPrompt);
+    const response = await result.response;
+    const fullResponse = response.text();
 
-      // Parse the response to separate English and Japanese
-      const englishMatch = fullResponse.match(/=== ENGLISH ===([\s\S]*?)(?==== JAPANESE ===|$)/);
-      const japaneseMatch = fullResponse.match(/=== JAPANESE ===([\s\S]*?)$/);
+    // Parse the response to separate English and Japanese
+    const englishMatch = fullResponse.match(/=== ENGLISH ===([\s\S]*?)(?==== JAPANESE ===|$)/);
+    const japaneseMatch = fullResponse.match(/=== JAPANESE ===([\s\S]*?)$/);
 
-      return {
-        suggestions: {
-          english: englishMatch ? englishMatch[1].trim() : fullResponse,
-          japanese: japaneseMatch ? japaneseMatch[1].trim() : null,
-          isBilingual: true
-        },
-        type: 'bilingual_travel_suggestions',
-        timestamp: new Date().toISOString(),
-        location: location
-      };
+    return {
+      suggestions: {
+        english: englishMatch ? englishMatch[1].trim() : fullResponse,
+        japanese: japaneseMatch ? japaneseMatch[1].trim() : null,
+        isBilingual: true
+      },
+      type: 'bilingual_travel_suggestions',
+      timestamp: new Date().toISOString(),
+      location: location
+    };
 
-    } catch (error) {
-      console.error('Gemini AI Error:', error.message);
-      throw new Error(`AI suggestion error: ${error.message}`);
-    }
+  } catch (error) {
+    console.error('Gemini AI Error:', error.message);
+    throw new Error(`AI suggestion error: ${error.message}`);
   }
-
-  // EXISTING METHOD: Generate suggestions with pre-formatted prompt
-  async generateTravelSuggestionsWithPrompt(enhancedPrompt, location) {
-    try {
-      const structuredPrompt = `You are a knowledgeable travel assistant specializing in Japan. 
-Generate personalized suggestions based on the weather conditions and user request provided below.
-
-${enhancedPrompt}  please give me an accurate response for the above message considering the intent of the prompt in 4 sentence and
-
-Please also  provide added suggestions in these categories:
-
-You are a travel and lifestyle assistant for Japan. Based on the current weather and 3-day forecast, provide concise, practical recommendations in the following categories:
-
-1. Travel & Sightseeing:
-   - List 3-4 key attractions suitable for the weather.
-
-2. Outdoor Activities & Sports:
-   - Suggest weather-appropriate activities (hiking, cycling, beach, etc.).
-   - Consider temperature and wind conditions.
-
-3. Fashion & Clothing Recommendations:
-   - Suggest clothing for current temperature.
-   - Include layering advice for temperature changes.
-   - Recommend necessary accessories (umbrella, sunglasses, etc.).
-
-4. Practical Tips:
-   - Transportation recommendations.
-   - Budget-friendly alternatives.
-
-Requirements:.
-- Use bullet points only; no emojis, icons, or bold text.
-- Avoid long explanations or extra commentary.
-- Please give me one point one sentence repsone for the added suggestions 
-- Focus on actionable, realistic advice suitable for a traveler in Japan.
-. Be specific about locations in ${location}, times, and practical details. Keep suggestions realistic and culturally appropriate for Japan.`;
-
-      console.log('🤖 Generating structured travel suggestions...');
-      
-      const result = await this.model.generateContent(structuredPrompt);
-      const response = await result.response;
-      const suggestions = response.text();
-
-      return {
-        suggestions: suggestions,
-        type: 'enhanced_travel_suggestions',
-        timestamp: new Date().toISOString(),
-        location: location
-      };
-
-    } catch (error) {
-      console.error('Gemini AI Error:', error.message);
-      throw new Error(`AI suggestion error: ${error.message}`);
-    }
-  }
-
+}
   // EXISTING METHOD: Original method for backward compatibility
   async generateTravelSuggestions(weatherData, userMessage, location) {
     try {

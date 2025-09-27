@@ -95,11 +95,10 @@ const ChatInterface = ({ onBackHome }) => {
     const welcomeMessage = {
       id: 'welcome',
       type: 'assistant',
-      content: `Welcome to your Japanese Weather Travel Assistant! 
-
-I can help you with travel recommendations based on weather conditions in ${selectedCity}. 
-
-You can speak in Japanese using the microphone or type your questions.`,
+      content: `Welcome to Smart Travel Assistant! Travel smart across Japan with tips on fashion, weather, food, and places to visit.
+スマートトラベルアシスタントへようこそ！ファッション、天気、グルメ、観光地の情報で、日本旅行をもっと便利に。
+You can speak in Japanese using the microphone or type your questions.
+マイクを使って日本語で話すことも、質問を入力することもできます。`,
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
@@ -127,7 +126,7 @@ You can speak in Japanese using the microphone or type your questions.`,
             </button>
             
             <h1 className="text-xl font-bold text-center flex-1 text-white tracking-wide">
-              Weather Travel Assistant
+              Smart Travel Assistant       
             </h1>
             
             <div className="flex items-center space-x-3">

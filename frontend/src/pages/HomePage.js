@@ -121,7 +121,7 @@ const HomePage = ({ onStartChat }) => {
             {/* Main Title */}
             <h1 className="text-6xl md:text-7xl font-bold text-gray-900 dark:text-gray-100 mb-6 leading-tight transition-colors duration-200">
               <span className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 dark:from-pink-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
-                Weather Travel
+                Smart Travel
               </span>
               <br />
               <span className="text-gray-800 dark:text-gray-200">Assistant</span>
@@ -129,7 +129,7 @@ const HomePage = ({ onStartChat }) => {
             
             {/* Japanese Subtitle */}
             <div className="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 mb-8 font-light transition-colors duration-200">
-              🌤️ 日本の旅行アシスタント 🗾
+              🌤️ スマートトラベルアシスタント🗾
             </div>
             
             {/* Description */}
@@ -161,7 +161,7 @@ const HomePage = ({ onStartChat }) => {
               </div>
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-1" />
-                12+ Japanese Cities
+                Japanese Cities
               </div>
             </div>
           </div>
