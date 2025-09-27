@@ -113,11 +113,6 @@ app.post('/api/chat', async (req, res) => {
       );
     }
 
-    // Step 10: Generate follow-up questions (optional)
-    // const followUpQuestions = await aiService.generateFollowUpQuestions(
-    //   aiResponse.suggestions?.english || aiResponse.suggestions,
-    //   weatherData
-    // );
 
     // Step 11: Add to message history
     const responseText = aiResponse.suggestions?.english || aiResponse.suggestions;

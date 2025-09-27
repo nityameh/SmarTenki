@@ -331,36 +331,10 @@ class WeatherService {
 
 
 
-// buildLightweightWeatherSummary(completeWeatherData) {
-//   const current = completeWeatherData?.current?.weather;
-//   const next3 = completeWeatherData?.forecast?.dailyForecasts?.slice(0, 3) || [];
-
-//   return {
-//     location: {
-//       city: completeWeatherData?.city,
-//       country: completeWeatherData?.country
-//     },
-//     current: current ? {
-//       temperatureC: current.temperature,
-//       feelsLikeC: current.feelsLike,
-//       condition: current.description,
-//       humidityPct: current.humidity,
-//       windMs: current.windSpeed,
-//       visibilityKm: current.visibility
-//     } : null,
-//     next3Days: next3.map(d => ({
-//       dayName: d.dayName,
-//       minC: d.temperature.min,
-//       maxC: d.temperature.max,
-//       condition: d.weather.description
-//     })),
-//     timestamp: new Date().toISOString()
-//   };
-// }
 
 buildLightweightWeatherSummary(completeWeatherData) {
   const current = completeWeatherData?.current?.weather;
-  const next3 = completeWeatherData?.forecast?.dailyForecasts?.slice(0, 3) || [];
+  const next3 = completeWeatherData?.forecast?.dailyForecasts?.slice(0, 5) || [];
 
   return {
     location: {

@@ -6,6 +6,8 @@ import VoiceInput from './VoiceInput';
 import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
 import { sendChatMessage } from '../services/chatAPI';
+import { useLanguage } from '../contexts/LanguageContext';
+import { toast } from 'react-toastify';
 
 const ChatInterface = ({ onBackHome }) => {
   const [messages, setMessages] = useState([]);
@@ -72,13 +74,65 @@ const ChatInterface = ({ onBackHome }) => {
       }
     } catch (error) {
       console.error('[ChatInterface] Chat error', error);
-      const errorMessage = {
-        id: `error_${Date.now()}`,
+      // const errorMessage = {
+      //   id: `error_${Date.now()}`,
+      //   type: 'assistant',
+      //   content: `Sorry, I encountered an error: ${error.message}. Please try again.`,
+      //   timestamp: new Date(),
+        const errorMessage = error.message.toLowerCase();
+      
+      if (errorMessage.includes('gemini') || errorMessage.includes('ai')) {
+        toast.error(
+          isJapanese
+            ? 'AIサービスが一時的に利用できません。もう一度お試しください。'
+            : 'AI service is temporarily unavailable. Please try again.',
+          { position: "top-center" }
+      );
+
+      const fallbackMessage = {
+        id: `fallback_${Date.now()}`,
         type: 'assistant',
-        content: `Sorry, I encountered an error: ${error.message}. Please try again.`,
+        content: {
+          english: "I'm having a moment! While I reconnect, feel free to explore the area. What would you like to know about?",
+          japanese: "接続に問題が発生しました。復旧中ですが、この地域について何か知りたいことはありますか？",
+          isBilingual: true,
+        },
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMessage]);
+    }else if (errorMessage.includes('network') || errorMessage.includes('connection')) {
+        toast.warning(
+          isJapanese ? 'インターネット接続を確認してください。' : 
+          'Connection issue detected. Please check your internet.',
+          { position: "top-center" }
+        );
+        
+      }else if (errorMessage.includes('weather')) {
+        toast.info(
+          isJapanese ? '天気データを更新中です。' : 
+          'Weather service is updating. Please try again.',
+          { position: "top-center" }
+        );
+        
+        const weatherFallback = {
+          id: `weather_fallback_${Date.now()}`,
+          type: 'assistant',
+          content: {
+            english: "Weather data is being updated. Meanwhile, I can still help with general travel advice!",
+            japanese: "天気データを更新しています。一般的な旅行のアドバイスでお手伝いできます！",
+            isBilingual: true
+          },
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, weatherFallback]);
+        
+      } else {
+        toast.error(
+          isJapanese ? '問題が発生しました。もう一度お試しください。' : 
+          'Oops! Something went wrong. Please try again.',
+          { position: "top-center" }
+        );
+      }
     } finally {
       setIsLoading(false);
     }

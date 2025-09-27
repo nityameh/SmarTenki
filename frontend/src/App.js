@@ -4,6 +4,8 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import HomePage from './pages/HomePage';
 import ChatPage from './pages/ChatPage';
 import { checkAPIHealth } from './services/chatAPI';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import './styles/advanced.css';
 
@@ -20,6 +22,10 @@ function App() {
       } catch (error) {
         setApiStatus('disconnected');
         console.error('❌ API connection failed:', error.message);
+        toast.error('Server connection failed. Some features may be limited.', {
+          position: "top-center",
+          autoClose: 5000,
+        });
       }
     };
 
@@ -62,6 +68,20 @@ function App() {
             <ChatPage onBackHome={handleBackHome} />
           )}
         </div>
+        
+        <ToastContainer
+          position="top-right"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          className="mt-16"
+        />
       </LanguageProvider>
     </ThemeProvider>
   );
