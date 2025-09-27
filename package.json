@@ -1,0 +1,10 @@
+{
+    "name": "smart-travel-assistant",
+    "version": "1.0",
+    "main": "backend/app.js",
+    "scripts": {
+        "start": "node app.js --prefix backend && npm start --prefix frontend",
+        "build":"npm install --prefix backend && npm install --prefix frontend"
+
+    }
+}
