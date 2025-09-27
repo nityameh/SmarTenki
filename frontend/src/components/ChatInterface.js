@@ -1,17 +1,16 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MapPin, Home } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Home } from 'lucide-react';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import VoiceInput from './VoiceInput';
 import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
 import { sendChatMessage } from '../services/chatAPI';
-import { useLanguage } from '../contexts/LanguageContext';
 import { toast } from 'react-toastify';
 
 const ChatInterface = ({ onBackHome }) => {
   const [messages, setMessages] = useState([]);
-  const [selectedCity, setSelectedCity] = useState('Tokyo');
+  const [selectedCity] = useState('Tokyo');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -88,17 +87,6 @@ const ChatInterface = ({ onBackHome }) => {
             : 'AI service is temporarily unavailable. Please try again.',
           { position: "top-center" }
       );
-
-      const fallbackMessage = {
-        id: `fallback_${Date.now()}`,
-        type: 'assistant',
-        content: {
-          english: "I'm having a moment! While I reconnect, feel free to explore the area. What would you like to know about?",
-          japanese: "接続に問題が発生しました。復旧中ですが、この地域について何か知りたいことはありますか？",
-          isBilingual: true,
-        },
-        timestamp: new Date(),
-      };
       setMessages(prev => [...prev, errorMessage]);
     }else if (errorMessage.includes('network') || errorMessage.includes('connection')) {
         toast.warning(

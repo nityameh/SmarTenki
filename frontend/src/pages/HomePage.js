@@ -7,7 +7,6 @@ import {
   MapPin, 
   ArrowRight,
   Sun,
-  Umbrella,
   Thermometer,
   Wind,
   Star

@@ -2,7 +2,7 @@ import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const LanguageToggle = () => {
-  const { displayLanguage, toggleLanguage, isJapanese } = useLanguage();
+  const { toggleLanguage, isJapanese } = useLanguage();
 
   return (
     <button
